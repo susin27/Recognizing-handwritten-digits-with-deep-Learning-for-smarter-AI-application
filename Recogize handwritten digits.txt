@@ -1,0 +1,53 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Calculate mean image per digit class
+mean_images = []
+for digit in range(10):
+    mean_img = np.mean(x_train[y_train == digit], axis=0)
+    mean_images.append(mean_img)
+
+# Plot average images for each digit
+fig, axes = plt.subplots(2, 5, figsize=(12,5))
+fig.suptitle('Average Images for Each Digit Class', fontsize=16)
+for i, ax in enumerate(axes.flatten()):
+    ax.imshow(mean_images[i], cmap='gray')
+    ax.axis('off')
+    ax.set_title(f'Digit {i}')
+plt.tight_layout()
+plt.subplots_adjust(top=0.85)
+plt.show()
+
+  
+2.2 Correlation Matrix of Selected Pixels
+
+# Select 50 random pixel indices for correlation to make plotting feasible
+np.random.seed(42)
+sample_pixels = np.random.choice(28*28, 50, replace=False)
+
+# Reshape training images to samples x pixels
+x_flat = x_train.reshape(-1, 28*28)
+
+# Extract subset of pixels
+x_subset = x_flat[:, sample_pixels]
+
+# Create correlation matrix
+corr_matrix = np.corrcoef(x_subset.T)
+
+# Plot heatmap
+plt.figure(figsize=(10,8))
+sns.heatmap(corr_matrix, cmap='coolwarm', center=0, square=True)
+plt.title('Correlation Matrix of Selected Pixel Intensities')
+plt.show()
+  
+
+3 Relationship Between Pixel Intensity and Target Labels
+
+center_pixel = x_train[:, 14, 14]
+
+plt.figure(figsize=(10,6))
+sns.boxplot(x=y_train, y=center_pixel, palette='pastel')
+plt.title('Center Pixel Intensity Distribution per Digit Class')
+plt.xlabel('Digit')
+plt.ylabel('Pixel Intensity')
+plt.show()
